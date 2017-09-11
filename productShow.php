@@ -29,9 +29,20 @@ if($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['product_delete_id'])){
         $product = new Product();
         $productId = $conn->real_escape_string($_GET['product_delete_id']);
         $product->loadProductFromDB($conn, $productId);
+        if($basketId = $product->getBasketId()){
+            $basket = new Basket();
+            $basket->loadBasketFromDB($conn, $basketId);
+            
+            $basket->setNbOfProducts($basket->getNbOfProducts()-1); 
+            $basket->setPrice($basket->getPrice()-$product->getPrice()); 
+
+            if($basket->updateBasket($conn)){
+                echo "Basket updated<br>";
+            }
+        }
         if($product->deleteProduct($conn)){
             echo "Product has been deleted.<br>";
-            echo "<a href='index.php'>Go to the main page</a><br>";
+           
 
         }else{
              header('Location: index.php');
@@ -73,3 +84,4 @@ $conn = NULL;
 
             
 
+<a href='index.php'>Go to the main page</a><br>

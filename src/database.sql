@@ -11,6 +11,14 @@
 
 CREATE DATABASE gameshop;
 
+
+CREATE TABLE baskets(
+    ID INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    nb_of_products TINYINT NOT NULL,
+    combined_price DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY(ID)
+) ENGINE = InnoDB;
+
 CREATE TABLE products(
     ID INT UNSIGNED NOT NULL AUTO_INCREMENT,
     basket_id INT UNSIGNED DEFAULT NULL,
@@ -21,12 +29,6 @@ CREATE TABLE products(
     CONSTRAINT FK__baskets FOREIGN KEY(basket_id) REFERENCES baskets(id) ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE = InnoDB;
 
-CREATE TABLE baskets(
-    ID INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    nb_of_products TINYINT NOT NULL,
-    combined_price DECIMAL(10, 2) NOT NULL,
-    PRIMARY KEY(ID)
-) ENGINE = InnoDB;
 
 
 INSERT INTO products VALUES (1,null,"Quake", 2.99), (2,null,"Unreal", 22.99), 

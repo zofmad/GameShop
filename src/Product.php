@@ -71,13 +71,14 @@ class Product{
     public function addProductToDB(mysqli $conn){
         if($this->id === -1){
             $sqlAddProduct = "INSERT INTO products"
-                    . " (basket_id, Title, Price) VALUES"
-                    . " ($this->basketId, '$this->Title', $this->Price);"; 
+                    . " (basket_id, Title, Price) VALUES "
+                    . "(null,'$this->title','$this->price')"; 
             if($conn->query($sqlAddProduct)){
                 $this->id = $conn->insert_id;
 
                 return $this;     
             }    
+            echo $conn->error;
         }
         return false;   
     }
@@ -107,9 +108,9 @@ class Product{
             
             $sqlUpdateProduct = "UPDATE products SET "
                     . "Title = '$this->title',"
-                    . "Price = $this->price"
-                    . "basket_id = $this->basketId"
-                    . "WHERE products.id=$this->id";
+                    . "Price = '$this->price'"
+                    . "basket_id = '$this->basketId'"
+                    . "WHERE products.id='$this->id'";
             if($conn->query($sqlUpdateProduct)){
                 return $this;
             }       
@@ -146,7 +147,7 @@ class Product{
         return false;
         
     }
-    public function setTitle($text){
+    public function setTitle($title){
         if(is_string($title)){
             $this->title = $title;
             return $this;

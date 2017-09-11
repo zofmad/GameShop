@@ -32,12 +32,23 @@ if(!isset($_SESSION['basketId'])){
  * and open the template in the editor.
  */
 
-
-
+if($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Title']) && isset($_POST['Price'])){
+        $product = new Product();
+        if($product->setTitle($conn->real_escape_string($_POST['Title'])) 
+                && $product->setPrice($conn->real_escape_string($_POST['Price']))){
+         
+            if($product->addProductToDB($conn)){
+                echo "Produkt dodany.<br>";
+            }
+        }
+        
+   
+       
+}
 
 echo '<h1>Welcome to Gameshop site!</h1>';
 
-echo 'Product list:';
+echo '<b>Product list:<b>';
 
 
 $products = Product::loadAllProducts($conn);
@@ -66,15 +77,34 @@ foreach($products as $product){
     echo "<a href='productShow.php?product_show_id=".$product->getId()."'>Show product</a><br></td></tr>";
     $ordinalNb++;
 }
-echo '</table>';
+echo '</table><br>';
 
 
 
 
 
 ?>
-<a href='allUsers.php'>Add product</a>
 
+<meta charset='UTF-8'>
+<form action='#' method='POST' title="New Product">
+    <b>Add new product</b>
+    <fieldset>
+        
+        <label>Title:
+            <input type="text" name="Title" required/>
+        </label>
+        <br>
+        <label>Price:
+            <input type="number" name="Price" value="0" step="0.01" min="0" required/>
+        </label>
+        <br>
+        <br>
+        <label>
+            <input type='submit' value="Add new product"></input>
+        </label>
+        
+    </fieldset>
+</form>
             
 
 
